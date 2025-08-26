@@ -6,8 +6,9 @@ const BookCard = ({book}) =>{
         <View>
             <Text>{book.title}</Text>
             <Text>{book.author}</Text>
-            <Text>{book.ispn}</Text>
+            <Text>{book.isbn}</Text>
             <Text>{book.yearOfRelease}</Text>
+            <Text>{book.bio}</Text>
         </View>
     )
 }

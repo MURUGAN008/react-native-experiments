@@ -1,11 +1,13 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useEffect, useState} from "react"
 import BookCard from "./BookCard"
-import {View,Text,StyleSheet} from "react-native"
+import {View,Text,StyleSheet, TouchableOpacity} from "react-native"
+import { useNavigation } from "@react-navigation/native";
 const Books =()=>{
     const [books,setBooks]=useState([]);
     const [isEmpty,setISEmpty]=useState(false);
     const [isLoading,setIsLoading]=useState(true);
+    const navigation=useNavigation();
     const loadBooks = async() => {
         const jsonValues=await AsyncStorage.getItem("books");
         if(jsonValues){
@@ -21,14 +23,22 @@ const Books =()=>{
     useEffect(()=>{
         loadBooks();
     },[])
+    const handleCreateBook=()=>{
+        navigation.navigate("createbook");
+    }
     return(
         <View style={style.main}>
-            Books Dashboard
+            <Text>Books Dashboard</Text>
             {isLoading?(
                 <Text>Loading</Text>
             ):(
                 isEmpty ? (
-                    <Text style={style.nobooks}>No books Available</Text>
+                    <>
+                        <Text style={style.nobooks}>No books Available</Text>
+                        <TouchableOpacity style={[style.addBooksEmpty,style.createBooks]} onPress={handleCreateBook}>
+                            <Text style={{color:"white",fontSize:10}}>Add Books</Text>
+                        </TouchableOpacity>
+                    </>
                 ):(
                     <View>
                     {books.map((book,idx)=>(<BookCard key={idx} book={book} />))}
@@ -54,6 +64,12 @@ const style=StyleSheet.create({
         top:"40%",
         left:"30%",
         fontSize: 20,
+    },
+    addBooksEmpty:{
+
+    },
+    createBooks:{
+        backgroundColor:"blue",
     }
 })
 
