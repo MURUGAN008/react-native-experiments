@@ -1,8 +1,9 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {useEffect, useState} from "react"
+import {useCallback, useEffect, useState} from "react"
 import BookCard from "./BookCard"
 import {View,Text,StyleSheet, TouchableOpacity} from "react-native"
 import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect } from "@react-navigation/native"
 const Books =()=>{
     const [books,setBooks]=useState([]);
     const [isEmpty,setISEmpty]=useState(false);
@@ -10,8 +11,10 @@ const Books =()=>{
     const navigation=useNavigation();
     const loadBooks = async() => {
         const jsonValues=await AsyncStorage.getItem("books");
+        console.log(jsonValues);
         if(jsonValues){
             setBooks(JSON.parse(jsonValues));
+            setISEmpty(false);
             setIsLoading(false);
         }
         else{
@@ -19,10 +22,16 @@ const Books =()=>{
             setISEmpty(true);
             //no books
         }
+        console.log(isEmpty);
     }
-    useEffect(()=>{
-        loadBooks();
+    useFocusEffect(
+          useCallback(() => {
+    const fetchBooks = async () => {
+      await loadBooks();
+    }
+    fetchBooks();
     },[])
+    )
     const handleCreateBook=()=>{
         navigation.navigate("createbook");
     }
