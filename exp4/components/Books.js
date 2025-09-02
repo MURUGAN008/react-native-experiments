@@ -14,7 +14,7 @@ const Books =()=>{
         console.log(jsonValues);
         if(jsonValues){
             setBooks(JSON.parse(jsonValues));
-            setISEmpty(false);
+            setISEmpty(JSON.parse(jsonValues).length!=0);
             setIsLoading(false);
         }
         else{
